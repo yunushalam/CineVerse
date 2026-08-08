@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cineverse-api
+    env: docker
+    plan: free
+    region: ohio
+    branch: main

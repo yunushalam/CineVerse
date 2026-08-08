@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "c1n3v3rs3-f1l3-4p1-m0v13-m4n4g3m3nt",
+		"name": "CineVerse API - Movie Management",
+		"description": "Postman Collection for CineVerse Movie Management REST API Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Create Movie (POST)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Oppenheimer\",\n    \"genre\": \"Biography\",\n    \"language\": \"English\",\n    \"releaseYear\": 2023,\n    \"rating\": 8.9,\n    \"duration\": 180,\n    \"director\": \"Christopher Nolan\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					]
+				}
+			}
+		},
+		{
+			"name": "2. Get All Movies (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					]
+				}
+			}
+		},
+		{
+			"name": "3. Get Movie By ID (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				}
+			}
+		},
+		{
+			"name": "4. Update Movie By ID (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Inception (Special Edition)\",\n    \"genre\": \"Sci-Fi\",\n    \"language\": \"English\",\n    \"releaseYear\": 2010,\n    \"rating\": 9.0,\n    \"duration\": 150,\n    \"director\": \"Christopher Nolan\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				}
+			}
+		},
+		{
+			"name": "5. Delete Movie By ID (DELETE)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				}
+			}
+		},
+		{
+			"name": "6. Filter Movies by Genre (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/genre/Sci-Fi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"genre",
+						"Sci-Fi"
+					]
+				}
+			}
+		},
+		{
+			"name": "7. Filter Movies by Language (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/language/English",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"language",
+						"English"
+					]
+				}
+			}
+		},
+		{
+			"name": "8. Filter Movies by Director (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/director/Christopher Nolan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"director",
+						"Christopher Nolan"
+					]
+				}
+			}
+		},
+		{
+			"name": "9. Filter Movies by Min Rating (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/rating/8.5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"rating",
+						"8.5"
+					]
+				}
+			}
+		},
+		{
+			"name": "10. Filter Movies by Release Year (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/year/2019",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"year",
+						"2019"
+					]
+				}
+			}
+		},
+		{
+			"name": "11. Pagination & Sorting - Page 0 Size 5 (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies?page=0&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "12. Sorting - Sort By Rating Desc (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies?sortBy=rating&sortDir=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "sortBy",
+							"value": "rating"
+						},
+						{
+							"key": "sortDir",
+							"value": "desc"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "13. Pagination & Sorting - Page 0 Size 5 Sort By Title (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies?page=0&size=5&sortBy=title",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "sortBy",
+							"value": "title"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "14. [Bonus] Search Title (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/search?title=Avengers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Avengers"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "15. [Bonus] Top Rated Movies (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/top-rated",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"top-rated"
+					]
+				}
+			}
+		},
+		{
+			"name": "16. [Bonus] Latest Movies (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/latest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"latest"
+					]
+				}
+			}
+		},
+		{
+			"name": "17. [Bonus] Count Movies By Genre (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/count/genre/Action",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"count",
+						"genre",
+						"Action"
+					]
+				}
+			}
+		}
+	]
+}
