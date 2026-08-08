@@ -2,7 +2,7 @@ package com.cineverse.api.controller;
 
 import com.cineverse.api.dto.ApiResponse;
 import com.cineverse.api.dto.MovieDTO;
-import com.cineverse.api.service.CloudinaryService;
+import com.cineverse.api.service.LocalFileStorageService;
 import com.cineverse.api.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,12 +24,12 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
-    private final CloudinaryService cloudinaryService;
+    private final LocalFileStorageService fileStorageService;
 
     // Constructor Injection as explicitly required by document specs
-    public MovieController(MovieService movieService, CloudinaryService cloudinaryService) {
+    public MovieController(MovieService movieService, LocalFileStorageService fileStorageService) {
         this.movieService = movieService;
-        this.cloudinaryService = cloudinaryService;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping
@@ -179,7 +179,7 @@ public class MovieController {
     }
 
     @PostMapping(value = "/upload", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Upload media file to Cloudinary", description = "Uploads a video or poster image file directly to Cloudinary.")
+    @Operation(summary = "Upload media file locally", description = "Uploads a video or poster image file to the local server disk.")
     public ResponseEntity<ApiResponse<String>> uploadFile(
             @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
         if (file.isEmpty()) {
@@ -187,11 +187,11 @@ public class MovieController {
         }
 
         try {
-            String fileUrl = cloudinaryService.uploadFile(file);
-            return ResponseEntity.ok(ApiResponse.success("File uploaded successfully to Cloudinary", fileUrl));
+            String fileUrl = fileStorageService.uploadFile(file);
+            return ResponseEntity.ok(ApiResponse.success("File uploaded successfully to local storage", fileUrl));
         } catch (java.io.IOException e) {
             return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Failed to upload file to Cloudinary: " + e.getMessage()));
+                    .body(ApiResponse.error("Failed to upload file locally: " + e.getMessage()));
         }
     }
 }
