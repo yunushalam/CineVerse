@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineVerse - Modern Movie Discovery, Downloaded Movies & Player</title>
+    <title>yunushVerse - Modern Movie Discovery, Downloaded Movies & Player</title>
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1031,7 +1031,7 @@
         <div class="navbar">
             <a href="#" class="logo">
                 <i class="fa-solid fa-film"></i>
-                <span>CineVerse</span>
+                <span>yunushVerse</span>
             </a>
 
             <!-- Search Input Box -->
@@ -1168,15 +1168,12 @@
                 <button class="close-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div id="quickFillSection" style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
-                <button type="button" class="quick-fill-btn" onclick="fillQuickAuth('admin', 'adminpassword')">⚡ Fill Admin Credentials</button>
-                <button type="button" class="quick-fill-btn" onclick="fillQuickAuth('user', 'userpassword')">👤 Fill User Credentials</button>
-            </div>
+
 
             <form id="authForm" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group full">
                     <label for="authUsernameInput" id="authUsernameLabel">Username or Email *</label>
-                    <input type="text" id="authUsernameInput" placeholder="admin or user@cineverse.com" required>
+                    <input type="text" id="authUsernameInput" placeholder="admin or user@yunushverse.com" required>
                 </div>
                 <div class="form-group full" id="authEmailGroup" style="display:none; margin-top:1rem;">
                     <label for="authEmailInput">Email Address *</label>
@@ -1534,7 +1531,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                showToast('Error connecting to CineVerse server', 'error');
+                showToast('Error connecting to yunushVerse server', 'error');
             }
         }
 
@@ -1670,8 +1667,8 @@
         function shareMovie() {
             if (navigator.share) {
                 navigator.share({
-                    title: 'CineVerse',
-                    text: 'Check out this awesome video on CineVerse!',
+                    title: 'yunushVerse',
+                    text: 'Check out this awesome video on yunushVerse!',
                     url: window.location.href
                 }).catch(err => console.log('Share failed:', err));
             } else {

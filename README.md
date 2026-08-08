@@ -1,4 +1,4 @@
-# 🎬 CineVerse API - Movie Management REST API
+# 🎬 yunushVerse API - Movie Management REST API
 
 A production-ready Movie Management REST API built with **Spring Boot**, **Spring Data JPA**, **Bean Validation**, **Constructor Injection**, **Swagger/OpenAPI Documentation**, and **Global Exception Handling**.
 

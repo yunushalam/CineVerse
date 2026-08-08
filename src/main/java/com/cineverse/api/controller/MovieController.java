@@ -2,6 +2,7 @@ package com.cineverse.api.controller;
 
 import com.cineverse.api.dto.ApiResponse;
 import com.cineverse.api.dto.MovieDTO;
+import com.cineverse.api.service.CloudinaryService;
 import com.cineverse.api.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,10 +24,12 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
+    private final CloudinaryService cloudinaryService;
 
     // Constructor Injection as explicitly required by document specs
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, CloudinaryService cloudinaryService) {
         this.movieService = movieService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @PostMapping
@@ -176,7 +179,7 @@ public class MovieController {
     }
 
     @PostMapping(value = "/upload", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Upload local media file", description = "Uploads a local downloaded video or poster image file to the server.")
+    @Operation(summary = "Upload media file to Cloudinary", description = "Uploads a video or poster image file directly to Cloudinary.")
     public ResponseEntity<ApiResponse<String>> uploadFile(
             @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
         if (file.isEmpty()) {
@@ -184,22 +187,11 @@ public class MovieController {
         }
 
         try {
-            java.io.File uploadDir = new java.io.File("uploads");
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-
-            String originalFilename = file.getOriginalFilename();
-            String cleanFilename = System.currentTimeMillis() + "_" + (originalFilename != null ? originalFilename.replaceAll("[^a-zA-Z0-9._-]", "_") : "media");
-            java.nio.file.Path targetPath = uploadDir.toPath().resolve(cleanFilename);
-
-            java.nio.file.Files.copy(file.getInputStream(), targetPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-
-            String fileUrl = "/uploads/" + cleanFilename;
-            return ResponseEntity.ok(ApiResponse.success("File uploaded successfully", fileUrl));
+            String fileUrl = cloudinaryService.uploadFile(file);
+            return ResponseEntity.ok(ApiResponse.success("File uploaded successfully to Cloudinary", fileUrl));
         } catch (java.io.IOException e) {
             return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Failed to store file: " + e.getMessage()));
+                    .body(ApiResponse.error("Failed to upload file to Cloudinary: " + e.getMessage()));
         }
     }
 }
