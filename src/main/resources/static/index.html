@@ -939,6 +939,15 @@
         }
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
+            html, body {
+                width: 100vw;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            main {
+                width: 100%;
+                overflow-x: hidden;
+            }
             header {
                 padding: 1rem;
             }
@@ -949,6 +958,7 @@
             }
             .search-box {
                 max-width: 100%;
+                width: 100%;
             }
             .nav-actions {
                 display: flex;
@@ -965,6 +975,7 @@
             }
             .hero-text h1 {
                 font-size: 1.8rem;
+                word-wrap: break-word;
             }
             .hero-text p {
                 font-size: 0.95rem;
@@ -987,17 +998,20 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 1rem;
+                width: 100%;
             }
             .filter-pills {
+                width: 100%;
+                min-width: 0;
                 overflow-x: auto;
                 padding-bottom: 0.5rem;
                 justify-content: flex-start;
                 flex-wrap: nowrap;
-                -ms-overflow-style: none;  /* IE and Edge */
-                scrollbar-width: none;  /* Firefox */
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
             .filter-pills::-webkit-scrollbar {
-                display: none; /* Chrome, Safari and Opera */
+                display: none;
             }
             .movies-grid {
                 grid-template-columns: 1fr;
