@@ -1186,9 +1186,36 @@
                 <div style="margin-top:1rem; text-align:center;">
                     <a href="#" style="color:var(--accent-secondary); font-size:0.9rem;" onclick="toggleAuthMode(event)" id="authToggleLink">Don't have an account? Sign Up</a>
                 </div>
+                <div style="margin-top:0.5rem; text-align:center;">
+                    <a href="#" style="color:var(--text-muted); font-size:0.8rem;" onclick="openResetPasswordModal(event)">Forgot Password?</a>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeAuthModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="authSubmitBtn">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Reset Password</h2>
+                <button class="close-btn" onclick="closeResetPasswordModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="resetPasswordForm" onsubmit="handleResetPasswordSubmit(event)">
+                <div class="form-group full">
+                    <label for="resetUsernameInput">Username *</label>
+                    <input type="text" id="resetUsernameInput" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group full" style="margin-top:1rem;">
+                    <label for="resetNewPasswordInput">New Password *</label>
+                    <input type="password" id="resetNewPasswordInput" placeholder="Enter new password" required>
+                </div>
+                <div class="modal-footer" style="margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeResetPasswordModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Reset Password</button>
                 </div>
             </form>
         </div>
@@ -1398,7 +1425,6 @@
             const toggleLink = document.getElementById('authToggleLink');
             const emailGroup = document.getElementById('authEmailGroup');
             const emailInput = document.getElementById('authEmailInput');
-            const quickFill = document.getElementById('quickFillSection');
             const usernameLabel = document.getElementById('authUsernameLabel');
             
             if (isLoginMode) {
@@ -1407,7 +1433,6 @@
                 toggleLink.textContent = "Don't have an account? Sign Up";
                 emailGroup.style.display = 'none';
                 emailInput.removeAttribute('required');
-                quickFill.style.display = 'flex';
                 usernameLabel.textContent = 'Username or Email *';
             } else {
                 title.textContent = 'Create an Account';
@@ -1415,8 +1440,43 @@
                 toggleLink.textContent = "Already have an account? Login";
                 emailGroup.style.display = 'flex';
                 emailInput.setAttribute('required', 'true');
-                quickFill.style.display = 'none';
                 usernameLabel.textContent = 'Username *';
+            }
+        }
+
+        function openResetPasswordModal(e) {
+            if (e) e.preventDefault();
+            closeAuthModal();
+            document.getElementById('resetPasswordModal').classList.add('active');
+        }
+
+        function closeResetPasswordModal() {
+            document.getElementById('resetPasswordModal').classList.remove('active');
+        }
+
+        async function handleResetPasswordSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('resetUsernameInput').value.trim();
+            const newPassword = document.getElementById('resetNewPasswordInput').value;
+
+            try {
+                const response = await fetch(`${AUTH_BASE}/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, newPassword })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('Password reset successfully! Please login with your new password.');
+                    closeResetPasswordModal();
+                    openAuthModal();
+                } else {
+                    showToast(data.message || 'Failed to reset password', true);
+                }
+            } catch (error) {
+                console.error('Reset Password Error:', error);
+                showToast('Network error while resetting password', true);
             }
         }
 

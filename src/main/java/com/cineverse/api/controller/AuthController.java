@@ -85,4 +85,20 @@ public class AuthController {
 
         return new ResponseEntity<>(ApiResponse.success("User registered successfully!", user.getUsername()), HttpStatus.CREATED);
     }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset user password", description = "Allows a user to reset their password using just their username (Warning: insecure in production).")
+    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("User not found!"));
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(ApiResponse.success("Password reset successfully!", user.getUsername()));
+    }
 }
