@@ -19,14 +19,14 @@ export default function AuthModal({ onClose, onSuccess }) {
     try {
       if (isLogin) {
         const response = await login(username, password);
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data?.data?.accessToken || response.data?.accessToken);
         localStorage.setItem('username', username);
         onSuccess({ username });
       } else {
         await register(username, password, email);
         // After successful registration, log them in
         const response = await login(username, password);
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data?.data?.accessToken || response.data?.accessToken);
         localStorage.setItem('username', username);
         onSuccess({ username });
       }

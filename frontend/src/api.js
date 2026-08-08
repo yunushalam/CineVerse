@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,8 +15,9 @@ api.interceptors.request.use((config) => {
 });
 
 export const getMovies = () => api.get('/movies');
-export const login = (username, password) => api.post('/auth/login', { username, password });
-export const register = (username, password, email) => api.post('/auth/register', { username, password, email, role: 'USER' });
-export const uploadMovie = (formData) => api.post('/movies/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const login = (username, password) => api.post('/api/auth/login', { usernameOrEmail: username, password });
+export const register = (username, password, email) => api.post('/api/auth/register', { username, password, email, role: 'USER' });
+export const createMovie = (movieData) => api.post('/movies', movieData);
+export const uploadFile = (formData) => api.post('/movies/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 
 export default api;

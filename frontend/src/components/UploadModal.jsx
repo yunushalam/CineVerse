@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, UploadCloud } from 'lucide-react';
-import { uploadMovie } from '../api';
+import { uploadFile, createMovie } from '../api';
 
 export default function UploadModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
@@ -26,17 +26,41 @@ export default function UploadModal({ onClose, onSuccess }) {
     setIsLoading(true);
     setError('');
 
-    const data = new FormData();
-    data.append('movie', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
-    if (files.movieFile) data.append('movieFile', files.movieFile);
-    if (files.trailerFile) data.append('trailerFile', files.trailerFile);
-    if (files.posterFile) data.append('posterFile', files.posterFile);
-
     try {
-      const response = await uploadMovie(data);
-      onSuccess(response.data);
+      let posterUrl = '';
+      let movieUrl = '';
+      let trailerUrl = '';
+
+      if (files.posterFile) {
+        const fd = new FormData();
+        fd.append('file', files.posterFile);
+        const res = await uploadFile(fd);
+        posterUrl = res.data.data;
+      }
+      if (files.movieFile) {
+        const fd = new FormData();
+        fd.append('file', files.movieFile);
+        const res = await uploadFile(fd);
+        movieUrl = res.data.data;
+      }
+      if (files.trailerFile) {
+        const fd = new FormData();
+        fd.append('file', files.trailerFile);
+        const res = await uploadFile(fd);
+        trailerUrl = res.data.data;
+      }
+
+      const movieData = {
+        ...formData,
+        posterFilePath: posterUrl,
+        movieFilePath: movieUrl,
+        trailerFilePath: trailerUrl
+      };
+
+      const response = await createMovie(movieData);
+      onSuccess(response.data.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Error uploading movie');
+      setError(err.response?.data?.message || err.response?.data || 'Error uploading movie');
     } finally {
       setIsLoading(false);
     }

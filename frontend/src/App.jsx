@@ -27,7 +27,7 @@ function App() {
     const fetchMovies = async () => {
       try {
         const response = await getMovies();
-        setMovies(response.data);
+        setMovies(response.data?.data || response.data || []);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
