@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         // Public Web UI & Static Resources
-                        .requestMatchers("/", "/index.html", "/favicon.ico", "/styles.css", "/app.js", "/css/**", "/js/**", "/uploads/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/favicon.ico", "/*.svg", "/*.png", "/*.jpg", "/assets/**", "/uploads/**").permitAll()
                         // Public Auth Endpoints
                         .requestMatchers("/api/auth/**").permitAll()
                         // Public Swagger & OpenAPI Docs
