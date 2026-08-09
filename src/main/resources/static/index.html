@@ -1856,7 +1856,7 @@
                         <div class="movie-director">
                             <i class="fa-solid fa-clapperboard"></i> Dir. ${escapeHtml(movie.director)}
                         </div>
-                        <button class="play-trailer-btn" onclick="playMovieTrailer('${escapeHtml(movie.title)}', '${movie.videoUrl || ''}')">
+                        <button class="play-trailer-btn" onclick="playMovieTrailer(${movie.id})">
                             <i class="fa-solid fa-circle-play"></i> Watch Movie / Video
                         </button>
                         ${localStorage.getItem('jwt_role') === 'ROLE_ADMIN' ? `
