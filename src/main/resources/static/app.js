@@ -65,6 +65,7 @@
             const role = localStorage.getItem('jwt_role');
             const authNav = document.getElementById('authNavSection');
             const addMovieBtn = document.getElementById('addMovieBtn');
+            const tmdbImportBtn = document.getElementById('tmdbImportBtn');
 
             if (token && username) {
                 authNav.innerHTML = `
@@ -76,6 +77,7 @@
                     </div>
                 `;
                 if (addMovieBtn) addMovieBtn.style.display = (role === 'ROLE_ADMIN') ? 'inline-flex' : 'none';
+                if (tmdbImportBtn) tmdbImportBtn.style.display = (role === 'ROLE_ADMIN') ? 'inline-flex' : 'none';
             } else {
                 authNav.innerHTML = `
                     <button class="btn btn-secondary" onclick="openAuthModal()">
@@ -83,6 +85,7 @@
                     </button>
                 `;
                 if (addMovieBtn) addMovieBtn.style.display = 'none';
+                if (tmdbImportBtn) tmdbImportBtn.style.display = 'none';
             }
         }
 
@@ -636,6 +639,71 @@
             });
         }
     
+
+        // TMDB Logic
+        function openTmdbModal() {
+            document.getElementById('tmdbModal').classList.add('active');
+            document.getElementById('tmdbSearchInput').value = '';
+            document.getElementById('tmdbResults').innerHTML = '';
+        }
+
+        function closeTmdbModal() {
+            document.getElementById('tmdbModal').classList.remove('active');
+        }
+
+        async function searchTmdb() {
+            const query = document.getElementById('tmdbSearchInput').value.trim();
+            if (!query) return showToast('Please enter a movie title', 'error');
+
+            const resultsContainer = document.getElementById('tmdbResults');
+            resultsContainer.innerHTML = '<div style="color:var(--text-muted); text-align:center;">Searching...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/tmdb/search?query=${encodeURIComponent(query)}`);
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.results && result.data.results.length > 0) {
+                    resultsContainer.innerHTML = result.data.results.map(movie => `
+                        <div class="tmdb-result-card">
+                            <img src="${movie.poster_path ? 'https://image.tmdb.org/t/p/w200' + movie.poster_path : defaultPosters['Inception']}" alt="Poster" class="tmdb-result-poster">
+                            <div class="tmdb-result-info">
+                                <div class="tmdb-result-title">${escapeHtml(movie.title || movie.original_title)}</div>
+                                <div class="tmdb-result-meta">${movie.release_date ? movie.release_date.substring(0,4) : 'N/A'} • ★ ${movie.vote_average ? movie.vote_average.toFixed(1) : '0.0'}</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="importTmdbMovie(${movie.id})" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Import</button>
+                        </div>
+                    `).join('');
+                } else {
+                    resultsContainer.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No movies found.</div>';
+                }
+            } catch (err) {
+                console.error(err);
+                resultsContainer.innerHTML = '<div style="color:var(--accent-primary); text-align:center;">Error searching TMDB. Check API Key.</div>';
+            }
+        }
+
+        async function importTmdbMovie(tmdbId) {
+            try {
+                showToast('Importing movie...', 'info');
+                const headers = getAuthHeaders();
+                const response = await fetch(`${API_BASE}/tmdb/import?tmdbId=${tmdbId}`, {
+                    method: 'POST',
+                    headers: headers
+                });
+                const result = await response.json();
+                
+                if (result.success || response.ok) {
+                    showToast('Movie imported successfully! 🎉', 'success');
+                    closeTmdbModal();
+                    fetchMovies();
+                } else {
+                    showToast(result.message || 'Failed to import movie.', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Network error during import.', 'error');
+            }
+        }
 
 // AOS Initialization
 const script = document.createElement('script');

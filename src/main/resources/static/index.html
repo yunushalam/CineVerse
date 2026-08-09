@@ -1022,6 +1022,48 @@
                 padding: 1.5rem;
             }
         }
+        /* TMDB Search Modal Styles */
+        .tmdb-search-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .tmdb-results {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        .tmdb-result-card {
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            align-items: center;
+        }
+        .tmdb-result-poster {
+            width: 50px;
+            height: 75px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #2a2a2a;
+        }
+        .tmdb-result-info {
+            flex: 1;
+        }
+        .tmdb-result-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+        }
+        .tmdb-result-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
@@ -1047,6 +1089,10 @@
                         <i class="fa-solid fa-user-lock"></i> Login / Register
                     </button>
                 </div>
+
+                <button id="tmdbImportBtn" class="btn btn-primary" onclick="openTmdbModal()" style="display: none; background: var(--accent-purple); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> Import TMDB
+                </button>
 
                 <button id="addMovieBtn" class="btn btn-primary" onclick="openAddMovieModal()" style="display: none;">
                     <i class="fa-solid fa-plus"></i> Add Movie
@@ -1159,6 +1205,25 @@
             </div>
         </div>
     </section>
+
+    <!-- TMDB Import Modal -->
+    <div id="tmdbModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Import from TMDB</h2>
+                <button class="close-btn" onclick="closeTmdbModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="tmdb-search-container">
+                <input type="text" id="tmdbSearchInput" style="flex:1; padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-glass); background:rgba(255,255,255,0.05); color:#fff; outline:none;" placeholder="Search movie title (e.g. Inception)..." onkeydown="if(event.key === 'Enter') searchTmdb()">
+                <button class="btn btn-primary" onclick="searchTmdb()" id="tmdbSearchBtn">
+                    <i class="fa-solid fa-magnifying-glass"></i> Search
+                </button>
+            </div>
+            <div id="tmdbResults" class="tmdb-results">
+                <!-- Results injected here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Auth (Login / Register) Modal -->
     <div id="authModal" class="modal-overlay">
