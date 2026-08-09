@@ -6,13 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 @Entity
 @Table(name = "movies")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Movie {
 
     @Id
@@ -51,11 +47,114 @@ public class Movie {
     @Column(name = "video_url")
     private String videoUrl;
 
+    @Schema(description = "Poster Image URL of the movie")
     @Column(name = "poster_url")
     private String posterUrl;
 
-    @Builder.Default
     @Column(name = "contentType")
     private String contentType = "MOVIE";
 
+    public Movie() {
+    }
+
+    public Movie(Long id, String title, String genre, String language, Integer releaseYear, Double rating, Integer duration, String director, String videoUrl, String posterUrl) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.language = language;
+        this.releaseYear = releaseYear;
+        this.rating = rating;
+        this.duration = duration;
+        this.director = director;
+        this.videoUrl = videoUrl;
+        this.posterUrl = posterUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 }

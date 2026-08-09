@@ -30,14 +30,20 @@ public class DataInitializer {
             // Seed Sample Movies, Trailers, and Songs
             if (movieRepository.count() == 0) {
                 movieRepository.saveAll(List.of(
-                        Movie.builder().title("Inception").genre("Sci-Fi").language("English").releaseYear(2010).rating(8.8).duration(148).director("Christopher Nolan").videoUrl("https://www.youtube.com/embed/YoHD9XEInc0").posterUrl("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80").contentType("MOVIE").build(),
-                        Movie.builder().title("The Dark Knight").genre("Action").language("English").releaseYear(2008).rating(9.0).duration(152).director("Christopher Nolan").videoUrl("https://www.youtube.com/embed/EXeTwQWrcwY").posterUrl("https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80").contentType("MOVIE").build(),
-                        Movie.builder().title("Dune: Part Two (Official Trailer)").genre("Sci-Fi").language("English").releaseYear(2024).rating(0.0).duration(3).director("Denis Villeneuve").videoUrl("https://www.youtube.com/embed/Way9Dexny3w").posterUrl("https://images.unsplash.com/photo-1616012481717-3bf79471180b?auto=format&fit=crop&w=600&q=80").contentType("TRAILER").build(),
-                        Movie.builder().title("GTA VI (Trailer 1)").genre("Action").language("English").releaseYear(2023).rating(0.0).duration(2).director("Rockstar Games").videoUrl("https://www.youtube.com/embed/QdBZY2fkU-0").posterUrl("https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=600&q=80").contentType("TRAILER").build(),
-                        Movie.builder().title("Blinding Lights").genre("Pop").language("English").releaseYear(2019).rating(0.0).duration(4).director("The Weeknd").videoUrl("https://www.youtube.com/embed/4NRXx6U8ABQ").posterUrl("https://images.unsplash.com/photo-1493225457124-a1a2a5956012?auto=format&fit=crop&w=600&q=80").contentType("SONG").build(),
-                        Movie.builder().title("Bohemian Rhapsody").genre("Rock").language("English").releaseYear(1975).rating(0.0).duration(6).director("Queen").videoUrl("https://www.youtube.com/embed/fJ9rUzIMcZQ").posterUrl("https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80").contentType("SONG").build()
+                        createMovie("Inception", "Sci-Fi", "English", 2010, 8.8, 148, "Christopher Nolan", "https://www.youtube.com/embed/YoHD9XEInc0", "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80", "MOVIE"),
+                        createMovie("The Dark Knight", "Action", "English", 2008, 9.0, 152, "Christopher Nolan", "https://www.youtube.com/embed/EXeTwQWrcwY", "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80", "MOVIE"),
+                        createMovie("Dune: Part Two (Official Trailer)", "Sci-Fi", "English", 2024, 0.0, 3, "Denis Villeneuve", "https://www.youtube.com/embed/Way9Dexny3w", "https://images.unsplash.com/photo-1616012481717-3bf79471180b?auto=format&fit=crop&w=600&q=80", "TRAILER"),
+                        createMovie("GTA VI (Trailer 1)", "Action", "English", 2023, 0.0, 2, "Rockstar Games", "https://www.youtube.com/embed/QdBZY2fkU-0", "https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=600&q=80", "TRAILER"),
+                        createMovie("Blinding Lights", "Pop", "English", 2019, 0.0, 4, "The Weeknd", "https://www.youtube.com/embed/4NRXx6U8ABQ", "https://images.unsplash.com/photo-1493225457124-a1a2a5956012?auto=format&fit=crop&w=600&q=80", "SONG"),
+                        createMovie("Bohemian Rhapsody", "Rock", "English", 1975, 0.0, 6, "Queen", "https://www.youtube.com/embed/fJ9rUzIMcZQ", "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80", "SONG")
                 ));
             }
         };
+    }
+
+    private Movie createMovie(String title, String genre, String language, Integer releaseYear, Double rating, Integer duration, String director, String videoUrl, String posterUrl, String contentType) {
+        Movie movie = new Movie(null, title, genre, language, releaseYear, rating, duration, director, videoUrl, posterUrl);
+        movie.setContentType(contentType);
+        return movie;
     }
 }

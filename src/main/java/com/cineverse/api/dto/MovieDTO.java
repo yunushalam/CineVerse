@@ -7,10 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Schema(description = "Data Transfer Object for Movie requests and responses")
 public class MovieDTO {
 
@@ -56,6 +52,22 @@ public class MovieDTO {
     private String posterUrl;
 
     // Explicit Getters and Setters
+
+    public MovieDTO() {
+    }
+
+    public MovieDTO(Long id, String title, String genre, String language, Integer releaseYear, Double rating, Integer duration, String director, String videoUrl, String posterUrl) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.language = language;
+        this.releaseYear = releaseYear;
+        this.rating = rating;
+        this.duration = duration;
+        this.director = director;
+        this.videoUrl = videoUrl;
+        this.posterUrl = posterUrl;
+    }
 
     public Long getId() {
         return id;
