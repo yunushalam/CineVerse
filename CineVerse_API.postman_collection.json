@@ -388,6 +388,58 @@
 					]
 				}
 			}
+		},
+		{
+			"name": "18. TMDB Search (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/tmdb/search?query=Inception",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"tmdb",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "Inception"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "19. TMDB Import (POST)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/tmdb/import?tmdbId=27205",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"tmdb",
+						"import"
+					],
+					"query": [
+						{
+							"key": "tmdbId",
+							"value": "27205"
+						}
+					]
+				}
+			}
 		}
 	]
 }
