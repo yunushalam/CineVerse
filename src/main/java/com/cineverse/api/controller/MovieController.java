@@ -2,8 +2,10 @@ package com.cineverse.api.controller;
 
 import com.cineverse.api.dto.ApiResponse;
 import com.cineverse.api.dto.MovieDTO;
+import com.cineverse.api.dto.tmdb.TmdbSearchResponse;
 import com.cineverse.api.service.LocalFileStorageService;
 import com.cineverse.api.service.MovieService;
+import com.cineverse.api.service.TmdbService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,11 +27,13 @@ public class MovieController {
 
     private final MovieService movieService;
     private final LocalFileStorageService fileStorageService;
+    private final TmdbService tmdbService;
 
     // Constructor Injection as explicitly required by document specs
-    public MovieController(MovieService movieService, LocalFileStorageService fileStorageService) {
+    public MovieController(MovieService movieService, LocalFileStorageService fileStorageService, TmdbService tmdbService) {
         this.movieService = movieService;
         this.fileStorageService = fileStorageService;
+        this.tmdbService = tmdbService;
     }
 
     @PostMapping
@@ -176,6 +180,27 @@ public class MovieController {
     public ResponseEntity<ApiResponse<Long>> getMovieCountByGenre(@PathVariable String genre) {
         long count = movieService.getMovieCountByGenre(genre);
         return ResponseEntity.ok(ApiResponse.success("Total movies count for genre: " + genre, count));
+    }
+
+    // -------------------------------------------------------------
+    // TMDB INTEGRATION ENDPOINTS
+    // -------------------------------------------------------------
+
+    @GetMapping("/tmdb/search")
+    @Operation(summary = "Search movies on TMDB", description = "Searches for movies using the external TMDB API.")
+    public ResponseEntity<ApiResponse<TmdbSearchResponse>> searchTmdbMovies(@RequestParam String query) {
+        TmdbSearchResponse response = tmdbService.searchMovies(query);
+        return ResponseEntity.ok(ApiResponse.success("TMDB search successful", response));
+    }
+
+    @PostMapping("/tmdb/import")
+    @Operation(summary = "Import movie from TMDB", description = "Fetches a movie from TMDB by ID and saves it to the local database.")
+    public ResponseEntity<ApiResponse<MovieDTO>> importFromTmdb(@RequestParam Long tmdbId) {
+        MovieDTO importedMovie = movieService.importFromTmdb(tmdbId);
+        return new ResponseEntity<>(
+                ApiResponse.success("Movie imported from TMDB successfully", importedMovie),
+                HttpStatus.CREATED
+        );
     }
 
     @PostMapping(value = "/upload", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)

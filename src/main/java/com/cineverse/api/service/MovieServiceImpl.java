@@ -1,6 +1,7 @@
 package com.cineverse.api.service;
 
 import com.cineverse.api.dto.MovieDTO;
+import com.cineverse.api.dto.tmdb.TmdbMovieDTO;
 import com.cineverse.api.entity.Movie;
 import com.cineverse.api.exception.MovieNotFoundException;
 import com.cineverse.api.repository.MovieRepository;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
+    private final TmdbService tmdbService;
 
     // Constructor Injection as explicitly required by document specs
-    public MovieServiceImpl(MovieRepository movieRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, TmdbService tmdbService) {
         this.movieRepository = movieRepository;
+        this.tmdbService = tmdbService;
     }
 
     @Override
@@ -161,6 +164,42 @@ public class MovieServiceImpl implements MovieService {
     @Transactional(readOnly = true)
     public long getMovieCountByGenre(String genre) {
         return movieRepository.countByGenreIgnoreCase(genre);
+    }
+
+    @Override
+    public MovieDTO importFromTmdb(Long tmdbId) {
+        TmdbMovieDTO tmdbMovie = tmdbService.getMovieDetails(tmdbId);
+        
+        Movie movie = new Movie();
+        movie.setTitle(tmdbMovie.getTitle() != null ? tmdbMovie.getTitle() : tmdbMovie.getOriginalTitle());
+        
+        String genre = "Unknown";
+        if (tmdbMovie.getGenres() != null && !tmdbMovie.getGenres().isEmpty()) {
+            genre = tmdbMovie.getGenres().get(0).getName();
+        }
+        movie.setGenre(genre);
+        
+        movie.setLanguage(tmdbMovie.getOriginalLanguage() != null ? tmdbMovie.getOriginalLanguage() : "en");
+        
+        Integer releaseYear = 2024;
+        if (tmdbMovie.getReleaseDate() != null && tmdbMovie.getReleaseDate().length() >= 4) {
+            try {
+                releaseYear = Integer.parseInt(tmdbMovie.getReleaseDate().substring(0, 4));
+            } catch (NumberFormatException ignored) {}
+        }
+        movie.setReleaseYear(releaseYear);
+        
+        movie.setRating(tmdbMovie.getVoteAverage() != null ? Math.round(tmdbMovie.getVoteAverage() * 10.0) / 10.0 : 0.0);
+        movie.setDuration(tmdbMovie.getRuntime() != null && tmdbMovie.getRuntime() > 0 ? tmdbMovie.getRuntime() : 120);
+        movie.setDirector("Unknown Director"); // TMDB requires a separate /credits call for director
+        
+        movie.setVideoUrl(""); 
+        if (tmdbMovie.getPosterPath() != null) {
+            movie.setPosterUrl("https://image.tmdb.org/t/p/w500" + tmdbMovie.getPosterPath());
+        }
+        
+        Movie savedMovie = movieRepository.save(movie);
+        return mapToDTO(savedMovie);
     }
 
     // Helper mapper methods

@@ -36,4 +36,6 @@ public interface MovieService {
     List<MovieDTO> getLatestMovies();
 
     long getMovieCountByGenre(String genre);
+
+    MovieDTO importFromTmdb(Long tmdbId);
 }
